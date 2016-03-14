@@ -1,0 +1,25 @@
+# Macaco Maluco infrastructure
+
+[Terraform](https://www.terraform.io/) provisioning scripts to setup the Macaco Maluco infrastructure.
+
+## Update the infrastructure
+
+Before you run any commands, you must have the `terraform` cli installed:
+
+```bash
+brew install terraform
+```
+
+*At the time of writing, the version used was `v0.6.12`.*
+
+On making any changes, first check the plan to make sure everything is correct:
+
+```bash
+make plan
+```
+
+If everything is OK, you can apply the changes:
+
+```bash
+make apply
+```
