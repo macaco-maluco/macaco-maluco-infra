@@ -29,6 +29,10 @@ resource "digitalocean_droplet" "macaco-maluco" {
   private_networking = true
 }
 
-output "ip" {
+output "floating_ip" {
   value = "${digitalocean_floating_ip.macaco-maluco.ip_address}"
+}
+
+output "droplet_ip" {
+  value = "${digitalocean_droplet.macaco-maluco.ipv4_address}"
 }
