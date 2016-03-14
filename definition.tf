@@ -27,6 +27,8 @@ resource "digitalocean_droplet" "macaco-maluco" {
   ssh_keys = [15143]
   ipv6 = true
   private_networking = true
+
+  user_data = "${file("./cloud-config.yaml")}"
 }
 
 output "floating_ip" {

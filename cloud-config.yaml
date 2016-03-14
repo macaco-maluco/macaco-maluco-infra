@@ -1,0 +1,22 @@
+#cloud-config
+
+coreos:
+  units:
+  - name: nginx.service
+    command: restart
+    content: |
+      [Unit]
+      Description=nginx
+      After=docker.service
+      Requires=docker.service
+
+      [Service]
+      KillMode=none
+      User=core
+      Restart=always
+      RestartSec=20s
+
+      ExecStartPre=-/usr/bin/docker kill nginx
+      ExecStartPre=-/usr/bin/docker rm nginx
+      ExecStart=/usr/bin/docker run --name nginx -p 80:80 -v /var/run/docker.sock:/tmp/docker.sock:ro jwilder/nginx-proxy
+      ExecStop=/usr/bin/docker stop nginx
