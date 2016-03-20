@@ -90,6 +90,27 @@ coreos:
       ExecStart=/usr/bin/docker run --name pressora -e VIRTUAL_HOST -e VIRTUAL_PORT macacomaluco/pressora
       ExecStop=/usr/bin/docker stop pressora
 
+  - name: go-horse-go.service
+    command: restart
+    content: |
+      [Unit]
+      Description=go-horse-go
+      After=docker.service
+      Requires=docker.service
+
+      [Service]
+      KillMode=none
+      User=core
+      Restart=always
+      RestartSec=20s
+      Environment="VIRTUAL_HOST=go-horse-go.macacomaluco.space"
+      Environment="VIRTUAL_PORT=80"
+
+      ExecStartPre=-/usr/bin/docker kill go-horse-go
+      ExecStartPre=-/usr/bin/docker rm go-horse-go
+      ExecStart=/usr/bin/docker run --name go-horse-go -e VIRTUAL_HOST -e VIRTUAL_PORT macacomaluco/go-horse-go
+      ExecStop=/usr/bin/docker stop go-horse-go
+
   - name: cinema-fu.service
     command: restart
     content: |
