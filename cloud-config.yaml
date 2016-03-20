@@ -70,6 +70,28 @@ coreos:
       ExecStart=/usr/bin/docker run --name nginx -p 80:80 -v /var/run/docker.sock:/tmp/docker.sock:ro jwilder/nginx-proxy
       ExecStop=/usr/bin/docker stop nginx
 
+  - name: macaco-maluco.service
+    command: restart
+    content: |
+      [Unit]
+      Description=macaco-maluco
+      After=docker.service
+      Requires=docker.service
+
+      [Service]
+      KillMode=none
+      User=core
+      Restart=always
+      RestartSec=20s
+      Environment="VIRTUAL_HOST=macacomaluco.space"
+      Environment="VIRTUAL_PORT=80"
+
+      ExecStartPre=-/usr/bin/docker kill macaco-maluco
+      ExecStartPre=-/usr/bin/docker rm macaco-maluco
+      ExecStartPre=/usr/bin/docker pull macacomaluco/macaco-maluco
+      ExecStart=/usr/bin/docker run --name macaco-maluco -e VIRTUAL_HOST -e VIRTUAL_PORT macacomaluco/macaco-maluco
+      ExecStop=/usr/bin/docker stop macaco-maluco
+
   - name: pressora.service
     command: restart
     content: |
