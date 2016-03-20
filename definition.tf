@@ -31,7 +31,7 @@ resource "digitalocean_droplet" "macaco-maluco" {
   name = "macaco-maluco"
   region = "nyc2"
   size = "512mb"
-  ssh_keys = [15143]
+  ssh_keys = [15143, 1762125]
   ipv6 = true
   private_networking = true
 
