@@ -65,3 +65,46 @@ coreos:
       ExecStartPre=-/usr/bin/docker rm pressora
       ExecStart=/usr/bin/docker run --name pressora -e VIRTUAL_HOST -e VIRTUAL_PORT macacomaluco/pressora
       ExecStop=/usr/bin/docker stop pressora
+
+  - name: cinema-fu.service
+    command: restart
+    content: |
+      [Unit]
+      Description=cinema-fu
+      After=mongo.service
+      Requires=mongo.service
+
+      [Service]
+      KillMode=none
+      User=core
+      Restart=always
+      RestartSec=20s
+      Environment="MONGO_PORT=tcp://172.17.42.1:27017"
+      Environment="MONGO_DATABASE=cinema-fu"
+      Environment="TMDB_API_KEY=${tmdb_api_key}"
+      Environment="VIRTUAL_HOST=cinema-fu.macacomaluco.space"
+      Environment="VIRTUAL_PORT=80"
+
+      ExecStartPre=-/usr/bin/docker kill cinema-fu
+      ExecStartPre=-/usr/bin/docker rm cinema-fu
+      ExecStart=/usr/bin/docker run --name cinema-fu -e MONGO_PORT -e MONGO_DATABASE -e TMDB_API_KEY -e VIRTUAL_HOST -e VIRTUAL_PORT macacomaluco/cinema-fu
+      ExecStop=/usr/bin/docker stop cinema-fu
+
+  - name: mongo.service
+    command: restart
+    content: |
+      [Unit]
+      Description=mongo
+      After=docker.service
+      Requires=docker.service
+
+      [Service]
+      KillMode=none
+      User=core
+      Restart=always
+      RestartSec=20s
+
+      ExecStartPre=-/usr/bin/docker kill mongo
+      ExecStartPre=-/usr/bin/docker rm mongo
+      ExecStart=/usr/bin/docker run --name mongo -p 172.17.42.1:27017:27017 mongo:2.4.14
+      ExecStop=/usr/bin/docker stop mongo
