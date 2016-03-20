@@ -66,6 +66,7 @@ coreos:
 
       ExecStartPre=-/usr/bin/docker kill nginx
       ExecStartPre=-/usr/bin/docker rm nginx
+      ExecStartPre=/usr/bin/docker pull jwilder/nginx-proxy
       ExecStart=/usr/bin/docker run --name nginx -p 80:80 -v /var/run/docker.sock:/tmp/docker.sock:ro jwilder/nginx-proxy
       ExecStop=/usr/bin/docker stop nginx
 
@@ -87,6 +88,7 @@ coreos:
 
       ExecStartPre=-/usr/bin/docker kill pressora
       ExecStartPre=-/usr/bin/docker rm pressora
+      ExecStartPre=/usr/bin/docker pull macacomaluco/pressora
       ExecStart=/usr/bin/docker run --name pressora -e VIRTUAL_HOST -e VIRTUAL_PORT macacomaluco/pressora
       ExecStop=/usr/bin/docker stop pressora
 
@@ -108,6 +110,7 @@ coreos:
 
       ExecStartPre=-/usr/bin/docker kill go-horse-go
       ExecStartPre=-/usr/bin/docker rm go-horse-go
+      ExecStartPre=/usr/bin/docker pull macacomaluco/go-horse-go
       ExecStart=/usr/bin/docker run --name go-horse-go -e VIRTUAL_HOST -e VIRTUAL_PORT macacomaluco/go-horse-go
       ExecStop=/usr/bin/docker stop go-horse-go
 
@@ -132,6 +135,7 @@ coreos:
 
       ExecStartPre=-/usr/bin/docker kill cinema-fu
       ExecStartPre=-/usr/bin/docker rm cinema-fu
+      ExecStartPre=/usr/bin/docker pull macacomaluco/cinema-fu
       ExecStart=/usr/bin/docker run --name cinema-fu -e MONGO_PORT -e MONGO_DATABASE -e TMDB_API_KEY -e VIRTUAL_HOST -e VIRTUAL_PORT macacomaluco/cinema-fu
       ExecStop=/usr/bin/docker stop cinema-fu
 
@@ -151,5 +155,6 @@ coreos:
 
       ExecStartPre=-/usr/bin/docker kill mongo
       ExecStartPre=-/usr/bin/docker rm mongo
+      ExecStartPre=/usr/bin/docker pull mongo:2.4.14
       ExecStart=/usr/bin/docker run --name mongo -p 172.17.42.1:27017:27017 mongo:2.4.14
       ExecStop=/usr/bin/docker stop mongo
