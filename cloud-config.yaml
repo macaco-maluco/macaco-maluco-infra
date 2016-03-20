@@ -141,8 +141,8 @@ coreos:
     content: |
       [Unit]
       Description=cinema-fu
-      After=mongo.service
-      Requires=mongo.service
+      After=docker.service
+      Requires=docker.service
 
       [Service]
       KillMode=none
