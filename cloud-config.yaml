@@ -171,7 +171,7 @@ coreos:
       User=core
       Restart=always
       RestartSec=20s
-      Environment="MONGO_PORT=tcp://172.17.42.1:27017"
+      Environment="MONGO_PORT=tcp://172.17.0.1:27017"
       Environment="MONGO_DATABASE=cinema-fu"
       Environment="TMDB_API_KEY=${tmdb_api_key}"
       Environment="VIRTUAL_HOST=cinema-fu.macacomaluco.space"
@@ -200,5 +200,5 @@ coreos:
       ExecStartPre=-/usr/bin/docker kill mongo
       ExecStartPre=-/usr/bin/docker rm mongo
       ExecStartPre=/usr/bin/docker pull mongo:2.4.14
-      ExecStart=/usr/bin/docker run --name mongo -p 172.17.42.1:27017:27017 mongo:2.4.14
+      ExecStart=/usr/bin/docker run --name mongo -p 172.17.0.1:27017:27017 mongo:2.4.14
       ExecStop=/usr/bin/docker stop mongo
