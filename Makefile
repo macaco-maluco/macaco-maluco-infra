@@ -1,10 +1,10 @@
 plan:
-	terraform plan -var-file=variables-values.tfvars
+	terraform plan
 
 apply:
-	terraform apply -var-file=variables-values.tfvars
+	terraform apply
 
 show:
-	terraform show -var-file=variables-values.tfvars
+	terraform show
 
 .DEFAULT_GOAL := show
