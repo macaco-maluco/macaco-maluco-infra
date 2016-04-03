@@ -114,6 +114,28 @@ coreos:
       ExecStart=/usr/bin/docker run --name pressora -e VIRTUAL_HOST -e VIRTUAL_PORT macacomaluco/pressora
       ExecStop=/usr/bin/docker stop pressora
 
+  - name: birinto.service
+    command: restart
+    content: |
+      [Unit]
+      Description=birinto
+      After=docker.service
+      Requires=docker.service
+
+      [Service]
+      KillMode=none
+      User=core
+      Restart=always
+      RestartSec=20s
+      Environment="VIRTUAL_HOST=birinto.macacomaluco.space"
+      Environment="VIRTUAL_PORT=80"
+
+      ExecStartPre=-/usr/bin/docker kill birinto
+      ExecStartPre=-/usr/bin/docker rm birinto
+      ExecStartPre=/usr/bin/docker pull macacomaluco/birinto
+      ExecStart=/usr/bin/docker run --name birinto -e VIRTUAL_HOST -e VIRTUAL_PORT macacomaluco/birinto
+      ExecStop=/usr/bin/docker stop birinto
+
   - name: go-horse-go.service
     command: restart
     content: |
