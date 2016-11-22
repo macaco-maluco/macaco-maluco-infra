@@ -14,6 +14,13 @@ resource "digitalocean_record" "macaco-maluco" {
   value = "${digitalocean_floating_ip.macaco-maluco.ip_address}"
 }
 
+resource "digitalocean_record" "day-one-macaco-maluco" {
+  domain = "${digitalocean_domain.macaco-maluco.name}"
+  type = "CNAME"
+  name = "day-one"
+  value = "macaco-maluco.github.io."
+}
+
 resource "digitalocean_floating_ip" "macaco-maluco" {
   droplet_id = "${digitalocean_droplet.macaco-maluco.id}"
   region = "${digitalocean_droplet.macaco-maluco.region}"
