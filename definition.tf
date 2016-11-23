@@ -32,7 +32,7 @@ resource "digitalocean_record" "giftellers-globalsign-macaco-maluco" {
   domain = "${digitalocean_domain.macaco-maluco.name}"
   type = "TXT"
   name = "globalsign-domain-verification"
-  value = "globalsign-domain-verification=xZvl7cQvyGlry7vcNk9dFllpm50jydTP_sY1Z02Nt9"
+  value = "globalsign-domain-verification=-fxW38vCBctXeaqa0e3W9WR9aGP3FSS4BlqYMBg2lk"
 }
 
 resource "digitalocean_record" "giftellers-firebase-macaco-maluco" {
