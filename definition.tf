@@ -21,6 +21,20 @@ resource "digitalocean_record" "day-one-macaco-maluco" {
   value = "macaco-maluco.github.io."
 }
 
+resource "digitalocean_record" "giftellers-globalsign-macaco-maluco" {
+  domain = "${digitalocean_domain.macaco-maluco.name}"
+  type = "TXT"
+  name = "globalsign-domain-verification"
+  value = "xZvl7cQvyGlry7vcNk9dFllpm50jydTP_sY1Z02Nt9"
+}
+
+resource "digitalocean_record" "giftellers-firebase-macaco-maluco" {
+  domain = "${digitalocean_domain.macaco-maluco.name}"
+  type = "TXT"
+  name = "firebase"
+  value = "giftellers"
+}
+
 resource "digitalocean_floating_ip" "macaco-maluco" {
   droplet_id = "${digitalocean_droplet.macaco-maluco.id}"
   region = "${digitalocean_droplet.macaco-maluco.region}"
