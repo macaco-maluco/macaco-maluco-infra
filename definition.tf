@@ -32,14 +32,14 @@ resource "digitalocean_record" "giftellers-globalsign-macaco-maluco" {
   domain = "${digitalocean_domain.macaco-maluco.name}"
   type = "TXT"
   name = "globalsign-domain-verification"
-  value = "xZvl7cQvyGlry7vcNk9dFllpm50jydTP_sY1Z02Nt9"
+  value = "globalsign-domain-verification=xZvl7cQvyGlry7vcNk9dFllpm50jydTP_sY1Z02Nt9"
 }
 
 resource "digitalocean_record" "giftellers-firebase-macaco-maluco" {
   domain = "${digitalocean_domain.macaco-maluco.name}"
   type = "TXT"
   name = "firebase"
-  value = "giftellers"
+  value = "firebase=giftellers"
 }
 
 resource "digitalocean_floating_ip" "macaco-maluco" {
