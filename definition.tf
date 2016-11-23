@@ -31,14 +31,14 @@ resource "digitalocean_record" "giftellers-macaco-maluco" {
 resource "digitalocean_record" "giftellers-globalsign-macaco-maluco" {
   domain = "${digitalocean_domain.macaco-maluco.name}"
   type = "TXT"
-  name = "globalsign-domain-verification"
+  name = "@"
   value = "globalsign-domain-verification=-fxW38vCBctXeaqa0e3W9WR9aGP3FSS4BlqYMBg2lk"
 }
 
 resource "digitalocean_record" "giftellers-firebase-macaco-maluco" {
   domain = "${digitalocean_domain.macaco-maluco.name}"
   type = "TXT"
-  name = "firebase"
+  name = "@"
   value = "firebase=giftellers"
 }
 
