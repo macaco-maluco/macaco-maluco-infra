@@ -21,6 +21,13 @@ resource "digitalocean_record" "day-one-macaco-maluco" {
   value = "macaco-maluco.github.io."
 }
 
+resource "digitalocean_record" "giftellers-macaco-maluco" {
+  domain = "${digitalocean_domain.macaco-maluco.name}"
+  type = "CNAME"
+  name = "giftellers"
+  value = "giftellers.firebaseapp.com."
+}
+
 resource "digitalocean_record" "giftellers-globalsign-macaco-maluco" {
   domain = "${digitalocean_domain.macaco-maluco.name}"
   type = "TXT"
