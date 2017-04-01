@@ -62,7 +62,8 @@ coreos:
       KillMode=none
       User=core
       Restart=always
-      RestartSec=20s
+      RestartSec=5min
+      TimeoutSec=5min
 
       ExecStartPre=-/usr/bin/docker kill nginx
       ExecStartPre=-/usr/bin/docker rm nginx
@@ -82,7 +83,8 @@ coreos:
       KillMode=none
       User=core
       Restart=always
-      RestartSec=20s
+      RestartSec=5min
+      TimeoutSec=5min
       Environment="VIRTUAL_HOST=macacomaluco.space"
       Environment="VIRTUAL_PORT=80"
 
@@ -104,7 +106,8 @@ coreos:
       KillMode=none
       User=core
       Restart=always
-      RestartSec=20s
+      RestartSec=5min
+      TimeoutSec=5min
       Environment="VIRTUAL_HOST=pressora.macacomaluco.space"
       Environment="VIRTUAL_PORT=80"
 
@@ -126,7 +129,8 @@ coreos:
       KillMode=none
       User=core
       Restart=always
-      RestartSec=20s
+      RestartSec=5min
+      TimeoutSec=5min
       Environment="VIRTUAL_HOST=birinto.macacomaluco.space"
       Environment="VIRTUAL_PORT=80"
 
@@ -148,7 +152,8 @@ coreos:
       KillMode=none
       User=core
       Restart=always
-      RestartSec=20s
+      RestartSec=5min
+      TimeoutSec=5min
       Environment="VIRTUAL_HOST=go-horse-go.macacomaluco.space"
       Environment="VIRTUAL_PORT=80"
 
@@ -170,7 +175,8 @@ coreos:
       KillMode=none
       User=core
       Restart=always
-      RestartSec=20s
+      RestartSec=5min
+      TimeoutSec=5min
       Environment="MONGO_PORT=tcp://172.17.0.1:27017"
       Environment="MONGO_DATABASE=cinema-fu"
       Environment="TMDB_API_KEY=${tmdb_api_key}"
@@ -195,7 +201,8 @@ coreos:
       KillMode=none
       User=core
       Restart=always
-      RestartSec=20s
+      RestartSec=5min
+      TimeoutSec=5min
 
       ExecStartPre=-/usr/bin/docker kill mongo
       ExecStartPre=-/usr/bin/docker rm mongo
