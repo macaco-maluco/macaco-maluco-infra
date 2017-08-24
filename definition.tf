@@ -57,7 +57,7 @@ resource "template_file" "user-data" {
 resource "digitalocean_droplet" "macaco-maluco" {
   image = "coreos-stable"
   name = "macaco-maluco"
-  region = "nyc2"
+  region = "nyc1"
   size = "512mb"
   ssh_keys = [15143, 1762125]
   ipv6 = true

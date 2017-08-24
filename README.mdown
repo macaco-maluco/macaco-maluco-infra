@@ -17,7 +17,7 @@ do_token = "value"
 tmdb_api_key = "value"
 ```
 
-*At the time of writing, the version used was `v0.6.12`.*
+*At the time of writing, the version used was `v0.10.2`.*
 
 On making any changes, first check the plan to make sure everything is correct:
 
