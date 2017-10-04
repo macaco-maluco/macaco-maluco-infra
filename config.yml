@@ -1,0 +1,222 @@
+# This config is meant to be consumed by the config transpiler, which will
+# generate the corresponding Ignition config. Do not pass this config directly
+# to instances of Container Linux.
+
+storage:
+  files:
+    - path: "/etc/sysctl.d/80-swappiness.conf"
+      filesystem: "root"
+      contents:
+        inline: "vm.swappiness=10"
+
+systemd:
+  units:
+    - name: var-vm-swapfile1.swap
+      enable: true
+      contents: |
+        [Unit]
+        Description=Turn on swap
+        Requires=create-swapfile.service
+        After=create-swapfile.service
+
+        [Swap]
+        What=/var/vm/swapfile1
+
+        [Install]
+        WantedBy=multi-user.target
+
+    - name: create-swapfile.service
+      contents: |
+        [Unit]
+        Description=Create a swapfile
+        RequiresMountsFor=/var
+        ConditionPathExists=!/var/vm/swapfile1
+
+        [Service]
+        Type=oneshot
+        ExecStart=/usr/bin/mkdir -p /var/vm
+        ExecStart=/usr/bin/fallocate -l 2048m /var/vm/swapfile1
+        ExecStart=/usr/bin/chmod 600 /var/vm/swapfile1
+        ExecStart=/usr/sbin/mkswap /var/vm/swapfile1
+        RemainAfterExit=true
+
+    - name: nginx.service
+      enable: true
+      contents: |
+        [Unit]
+        Description=nginx
+        After=docker.service
+        Requires=docker.service
+
+        [Service]
+        KillMode=none
+        User=core
+        Restart=always
+        RestartSec=5min
+        TimeoutSec=5min
+
+        ExecStartPre=-/usr/bin/docker kill nginx
+        ExecStartPre=-/usr/bin/docker rm nginx
+        ExecStartPre=/usr/bin/docker pull jwilder/nginx-proxy
+        ExecStart=/usr/bin/docker run --name nginx -p 80:80 -v /var/run/docker.sock:/tmp/docker.sock:ro jwilder/nginx-proxy
+        ExecStop=/usr/bin/docker stop nginx
+
+        [Install]
+        WantedBy=multi-user.target
+
+    - name: macaco-maluco.service
+      enable: true
+      contents: |
+        [Unit]
+        Description=macaco-maluco
+        After=docker.service
+        Requires=docker.service
+
+        [Service]
+        KillMode=none
+        User=core
+        Restart=always
+        RestartSec=5min
+        TimeoutSec=5min
+        Environment="VIRTUAL_HOST=macacomaluco.space"
+        Environment="VIRTUAL_PORT=80"
+
+        ExecStartPre=-/usr/bin/docker kill macaco-maluco
+        ExecStartPre=-/usr/bin/docker rm macaco-maluco
+        ExecStartPre=/usr/bin/docker pull macacomaluco/macaco-maluco
+        ExecStart=/usr/bin/docker run --name macaco-maluco -e VIRTUAL_HOST -e VIRTUAL_PORT macacomaluco/macaco-maluco
+        ExecStop=/usr/bin/docker stop macaco-maluco
+
+        [Install]
+        WantedBy=multi-user.target
+
+    - name: pressora.service
+      enable: true
+      contents: |
+        [Unit]
+        Description=pressora
+        After=docker.service
+        Requires=docker.service
+
+        [Service]
+        KillMode=none
+        User=core
+        Restart=always
+        RestartSec=5min
+        TimeoutSec=5min
+        Environment="VIRTUAL_HOST=pressora.macacomaluco.space"
+        Environment="VIRTUAL_PORT=80"
+
+        ExecStartPre=-/usr/bin/docker kill pressora
+        ExecStartPre=-/usr/bin/docker rm pressora
+        ExecStartPre=/usr/bin/docker pull macacomaluco/pressora
+        ExecStart=/usr/bin/docker run --name pressora -e VIRTUAL_HOST -e VIRTUAL_PORT macacomaluco/pressora
+        ExecStop=/usr/bin/docker stop pressora
+
+        [Install]
+        WantedBy=multi-user.target
+
+    - name: birinto.service
+      enable: true
+      contents: |
+        [Unit]
+        Description=birinto
+        After=docker.service
+        Requires=docker.service
+
+        [Service]
+        KillMode=none
+        User=core
+        Restart=always
+        RestartSec=5min
+        TimeoutSec=5min
+        Environment="VIRTUAL_HOST=birinto.macacomaluco.space"
+        Environment="VIRTUAL_PORT=80"
+
+        ExecStartPre=-/usr/bin/docker kill birinto
+        ExecStartPre=-/usr/bin/docker rm birinto
+        ExecStartPre=/usr/bin/docker pull macacomaluco/birinto
+        ExecStart=/usr/bin/docker run --name birinto -e VIRTUAL_HOST -e VIRTUAL_PORT macacomaluco/birinto
+        ExecStop=/usr/bin/docker stop birinto
+
+        [Install]
+        WantedBy=multi-user.target
+
+    - name: go-horse-go.service
+      enable: true
+      contents: |
+        [Unit]
+        Description=go-horse-go
+        After=docker.service
+        Requires=docker.service
+
+        [Service]
+        KillMode=none
+        User=core
+        Restart=always
+        RestartSec=5min
+        TimeoutSec=5min
+        Environment="VIRTUAL_HOST=go-horse-go.macacomaluco.space"
+        Environment="VIRTUAL_PORT=80"
+
+        ExecStartPre=-/usr/bin/docker kill go-horse-go
+        ExecStartPre=-/usr/bin/docker rm go-horse-go
+        ExecStartPre=/usr/bin/docker pull macacomaluco/go-horse-go
+        ExecStart=/usr/bin/docker run --name go-horse-go -e VIRTUAL_HOST -e VIRTUAL_PORT macacomaluco/go-horse-go
+        ExecStop=/usr/bin/docker stop go-horse-go
+
+        [Install]
+        WantedBy=multi-user.target
+
+    - name: cinema-fu.service
+      enable: true
+      contents: |
+        [Unit]
+        Description=cinema-fu
+        After=docker.service
+        Requires=docker.service
+
+        [Service]
+        KillMode=none
+        User=core
+        Restart=always
+        RestartSec=5min
+        TimeoutSec=5min
+        Environment="MONGO_PORT=tcp://172.17.0.1:27017"
+        Environment="MONGO_DATABASE=cinema-fu"
+        Environment="TMDB_API_KEY=${tmdb_api_key}"
+        Environment="VIRTUAL_HOST=cinema-fu.macacomaluco.space"
+        Environment="VIRTUAL_PORT=80"
+
+        ExecStartPre=-/usr/bin/docker kill cinema-fu
+        ExecStartPre=-/usr/bin/docker rm cinema-fu
+        ExecStartPre=/usr/bin/docker pull macacomaluco/cinema-fu
+        ExecStart=/usr/bin/docker run --name cinema-fu -e MONGO_PORT -e MONGO_DATABASE -e TMDB_API_KEY -e VIRTUAL_HOST -e VIRTUAL_PORT macacomaluco/cinema-fu
+        ExecStop=/usr/bin/docker stop cinema-fu
+
+        [Install]
+        WantedBy=multi-user.target
+
+    - name: mongo.service
+      enable: true
+      contents: |
+        [Unit]
+        Description=mongo
+        After=docker.service
+        Requires=docker.service
+
+        [Service]
+        KillMode=none
+        User=core
+        Restart=always
+        RestartSec=5min
+        TimeoutSec=5min
+
+        ExecStartPre=-/usr/bin/docker kill mongo
+        ExecStartPre=-/usr/bin/docker rm mongo
+        ExecStartPre=/usr/bin/docker pull mongo:2.4.14
+        ExecStart=/usr/bin/docker run --name mongo -p 172.17.0.1:27017:27017 mongo:2.4.14
+        ExecStop=/usr/bin/docker stop mongo
+
+        [Install]
+        WantedBy=multi-user.target

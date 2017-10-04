@@ -4,10 +4,10 @@
 
 ## Update the infrastructure
 
-Before you run any commands, you must have the `terraform` cli installed:
+Before you run any commands, make sure to have all the dependencies installed:
 
 ```bash
-brew install terraform
+make install
 ```
 
 And a [values](https://www.terraform.io/docs/configuration/variables.html) file named `terraform.tfvars` with the Digital Ocean API key and the The movie database API key:
@@ -17,7 +17,7 @@ do_token = "value"
 tmdb_api_key = "value"
 ```
 
-*At the time of writing, the version used was `v0.10.2`.*
+*At the time of writing, the version used was `v0.10.7`.*
 
 On making any changes, first check the plan to make sure everything is correct:
 

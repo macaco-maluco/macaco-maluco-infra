@@ -47,8 +47,8 @@ resource "digitalocean_floating_ip" "macaco-maluco" {
   region = "${digitalocean_droplet.macaco-maluco.region}"
 }
 
-resource "template_file" "user-data" {
-  template = "${file("./cloud-config.yaml")}"
+data "template_file" "user-data" {
+  template = "${file("./config.ign")}"
   vars {
     tmdb_api_key = "${var.tmdb_api_key}"
   }
@@ -63,7 +63,7 @@ resource "digitalocean_droplet" "macaco-maluco" {
   ipv6 = true
   private_networking = true
 
-  user_data = "${template_file.user-data.rendered}"
+  user_data = "${data.template_file.user-data.rendered}"
 }
 
 output "floating_ip" {
