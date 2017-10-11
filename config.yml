@@ -27,8 +27,19 @@ storage:
       contents:
         inline: "vm.swappiness=10"
 
+    - path: "/etc/systemd/resolved.conf"
+      filesystem: "root"
+      contents:
+        inline: |
+          [Resolve]
+          DNS=8.8.8.8
+          FallbackDNS=8.8.4.4
+
 systemd:
   units:
+    - name: systemd-resolved.service
+      enable: true
+
     - name: var-vm-swapfile1.swap
       enable: true
       contents: |
