@@ -54,6 +54,13 @@ data "template_file" "user-data" {
   }
 }
 
+resource "digitalocean_volume" "ssb-volume" {
+  region      = "nyc1"
+  name        = "ssb-volume"
+  size        = 10
+  description = "Secure Scuttlebutt Pub Data"
+}
+
 resource "digitalocean_droplet" "macaco-maluco" {
   image = "coreos-stable"
   name = "macaco-maluco"
@@ -64,6 +71,7 @@ resource "digitalocean_droplet" "macaco-maluco" {
   private_networking = true
 
   user_data = "${data.template_file.user-data.rendered}"
+  volume_ids = ["${digitalocean_volume.ssb-volume.id}"]
 }
 
 output "floating_ip" {
