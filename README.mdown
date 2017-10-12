@@ -17,8 +17,6 @@ do_token = "value"
 tmdb_api_key = "value"
 ```
 
-*At the time of writing, the version used was `v0.10.7`.*
-
 On making any changes, first check the plan to make sure everything is correct:
 
 ```bash
