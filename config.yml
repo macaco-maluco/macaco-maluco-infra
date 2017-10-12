@@ -64,7 +64,7 @@ systemd:
         [Service]
         Type=oneshot
         ExecStart=/usr/bin/mkdir -p /var/vm
-        ExecStart=/usr/bin/fallocate -l 2048m /var/vm/swapfile1
+        ExecStart=/usr/bin/fallocate -l 4096m /var/vm/swapfile1
         ExecStart=/usr/bin/chmod 600 /var/vm/swapfile1
         ExecStart=/usr/sbin/mkswap /var/vm/swapfile1
         RemainAfterExit=true
@@ -281,12 +281,13 @@ systemd:
         TimeoutSec=5min
         Environment="VIRTUAL_HOST=ssb-pub.macacomaluco.space"
         Environment="PUB_URL=ssb-pub.macacomaluco.space"
+        Environment="HOST=ssb-pub.macacomaluco.space"
         Environment="VIRTUAL_PORT=80"
 
         ExecStartPre=-/usr/bin/docker kill ssb-pub
         ExecStartPre=-/usr/bin/docker rm ssb-pub
         ExecStartPre=/usr/bin/docker pull staltz/easy-ssb-pub
-        ExecStart=/usr/bin/docker run --name ssb-pub -e VIRTUAL_HOST -e VIRTUAL_PORT -e PUB_URL -v /media/ssb:/root/.ssb -p 8007:8007 -p 8008:8008 staltz/easy-ssb-pub
+        ExecStart=/usr/bin/docker run --name ssb-pub -e VIRTUAL_HOST -e VIRTUAL_PORT -e PUB_URL -e HOST -v /media/ssb:/root/.ssb -p 8007:8007 -p 8008:8008 -m 450M --memory-swap 1G staltz/easy-ssb-pub
         ExecStop=/usr/bin/docker stop ssb-pub
 
         [Install]
