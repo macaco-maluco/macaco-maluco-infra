@@ -22,4 +22,7 @@ show:
 	./terraform get
 	./terraform show
 
+destroy:
+	./terraform destroy
+
 .DEFAULT_GOAL := show
