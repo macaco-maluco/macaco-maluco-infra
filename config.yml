@@ -1,25 +1,26 @@
 # This config is meant to be consumed by the config transpiler, which will
 # generate the corresponding Ignition config. Do not pass this config directly
 # to instances of Container Linux.
-
+#
 storage:
-  disks:
-    # the name ssb-volume is comming from the `definition.tf` file
-    - device: /dev/disk/by-id/scsi-0DO_Volume_ssb-volume
-      partitions:
-        # this is used by the `by-partlabel` bellow
-        - label: ssb
-          number: 0
-          size: '0'
-          start: '0'
-
-  # this setups the filesystem on top of the partition of the previous disk
-  filesystems:
-    - name: ssb
-      mount:
-        label: ssb
-        device: /dev/disk/by-partlabel/ssb
-        format: ext4
+  # TODO: figure out why this is failing on concecutive runs and enable it again
+  # disks:
+  #   # the name ssb-volume is comming from the `definition.tf` file
+  #   - device: /dev/disk/by-id/scsi-0DO_Volume_ssb-volume
+  #     partitions:
+  #       # this is used by the `by-partlabel` bellow
+  #       - label: ssb
+  #         number: 0
+  #         size: '0'
+  #         start: '0'
+  #
+  # # this setups the filesystem on top of the partition of the previous disk
+  # filesystems:
+  #   - name: ssb
+  #     mount:
+  #       label: ssb
+  #       device: /dev/disk/by-partlabel/ssb
+  #       format: ext4
 
   files:
     - path: "/etc/sysctl.d/80-swappiness.conf"
