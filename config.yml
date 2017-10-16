@@ -146,6 +146,32 @@ systemd:
         [Install]
         WantedBy=multi-user.target
 
+    - name: unbubble.service
+      enable: true
+      contents: |
+        [Unit]
+        Description=unbubble
+        After=docker.service
+        Requires=docker.service
+
+        [Service]
+        KillMode=none
+        User=core
+        Restart=always
+        RestartSec=5min
+        TimeoutSec=5min
+        Environment="VIRTUAL_HOST=unbubble.space"
+        Environment="VIRTUAL_PORT=80"
+
+        ExecStartPre=-/usr/bin/docker kill unbubble
+        ExecStartPre=-/usr/bin/docker rm unbubble
+        ExecStartPre=/usr/bin/docker pull pirelenito/unbubble
+        ExecStart=/usr/bin/docker run --name unbubble -e VIRTUAL_HOST -e VIRTUAL_PORT pirelenito/unbubble
+        ExecStop=/usr/bin/docker stop unbubble
+
+        [Install]
+        WantedBy=multi-user.target
+
     - name: birinto.service
       enable: true
       contents: |

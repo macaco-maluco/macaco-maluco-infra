@@ -42,6 +42,11 @@ resource "digitalocean_record" "giftellers-firebase-macaco-maluco" {
   value = "firebase=giftellers"
 }
 
+resource "digitalocean_domain" "unbubble" {
+  name = "unbubble.space"
+  ip_address = "${digitalocean_floating_ip.macaco-maluco.ip_address}"
+}
+
 resource "digitalocean_floating_ip" "macaco-maluco" {
   droplet_id = "${digitalocean_droplet.macaco-maluco.id}"
   region = "${digitalocean_droplet.macaco-maluco.region}"
