@@ -1,5 +1,7 @@
 # Macaco Maluco infrastructure
 
+[![Build Status](https://travis-ci.org/macaco-maluco/macaco-maluco-infra.svg)](https://travis-ci.org/macaco-maluco/macaco-maluco-infra)
+
 [Terraform](https://www.terraform.io/) provisioning scripts to setup the Macaco Maluco infrastructure.
 
 ## Update the infrastructure

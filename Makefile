@@ -1,8 +1,16 @@
-install:
-	curl -o ct -L https://github.com/coreos/container-linux-config-transpiler/releases/download/v0.5.0/ct-v0.5.0-x86_64-apple-darwin
-	chmod +x ct
+ifeq ($(shell uname),Darwin)
+	CT_RELEASE="apple-darwin"
+	TERRAFORM_RELEASE="darwin"
+else
+	CT_RELEASE="unknown-linux-gnu"
+	TERRAFORM_RELEASE="linux"
+endif
 
-	curl -L https://releases.hashicorp.com/terraform/0.10.7/terraform_0.10.7_darwin_amd64.zip | tar zxf -
+install:
+	curl -o ct -L https://github.com/coreos/container-linux-config-transpiler/releases/download/v0.5.0/ct-v0.5.0-x86_64-$(CT_RELEASE)
+	curl -L https://releases.hashicorp.com/terraform/0.10.7/terraform_0.10.7_$(TERRAFORM_RELEASE)_amd64.zip | tar zxf -
+
+	chmod +x ct
 	chmod +x terraform
 
 	./terraform init
