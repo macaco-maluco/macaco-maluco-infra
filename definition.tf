@@ -59,11 +59,11 @@ data "template_file" "user-data" {
   }
 }
 
-resource "digitalocean_volume" "ssb-volume" {
+resource "digitalocean_volume" "persisted-volume" {
   region      = "nyc1"
-  name        = "ssb-volume"
-  size        = 10
-  description = "Secure Scuttlebutt Pub Data"
+  name        = "persisted-volume"
+  size        = 4
+  description = "Persisted data"
 }
 
 resource "digitalocean_droplet" "macaco-maluco" {
@@ -76,7 +76,7 @@ resource "digitalocean_droplet" "macaco-maluco" {
   private_networking = true
 
   user_data = "${data.template_file.user-data.rendered}"
-  volume_ids = ["${digitalocean_volume.ssb-volume.id}"]
+  volume_ids = ["${digitalocean_volume.persisted-volume.id}"]
 }
 
 output "floating_ip" {

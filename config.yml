@@ -4,23 +4,23 @@
 #
 storage:
   # TODO: figure out why this is failing on concecutive runs and enable it again
-  # disks:
-  #   # the name ssb-volume is comming from the `definition.tf` file
-  #   - device: /dev/disk/by-id/scsi-0DO_Volume_ssb-volume
-  #     partitions:
-  #       # this is used by the `by-partlabel` bellow
-  #       - label: ssb
-  #         number: 0
-  #         size: '0'
-  #         start: '0'
-  #
-  # # this setups the filesystem on top of the partition of the previous disk
-  # filesystems:
-  #   - name: ssb
-  #     mount:
-  #       label: ssb
-  #       device: /dev/disk/by-partlabel/ssb
-  #       format: ext4
+  disks:
+    # the name persisted-volume is comming from the `definition.tf` file
+    - device: /dev/disk/by-id/scsi-0DO_Volume_persisted-volume
+      partitions:
+        # this is used by the `by-partlabel` bellow
+        - label: persisted
+          number: 0
+          size: '0'
+          start: '0'
+
+  # this setups the filesystem on top of the partition of the previous disk
+  filesystems:
+    - name: persisted
+      mount:
+        label: persisted
+        device: /dev/disk/by-partlabel/persisted
+        format: ext4
 
   files:
     - path: "/etc/sysctl.d/80-swappiness.conf"
@@ -152,6 +152,7 @@ systemd:
         [Unit]
         Description=unbubble
         After=docker.service
+        RequiresMountsFor=/media/persisted
         Requires=docker.service
 
         [Service]
@@ -166,7 +167,7 @@ systemd:
         ExecStartPre=-/usr/bin/docker kill unbubble
         ExecStartPre=-/usr/bin/docker rm unbubble
         ExecStartPre=/usr/bin/docker pull pirelenito/unbubble
-        ExecStart=/usr/bin/docker run --name unbubble -e VIRTUAL_HOST -e VIRTUAL_PORT pirelenito/unbubble
+        ExecStart=/usr/bin/docker run --name unbubble -e VIRTUAL_HOST -e VIRTUAL_PORT -v /media/persisted/unbubble:/usr/src/app/server/log pirelenito/unbubble
         ExecStop=/usr/bin/docker stop unbubble
 
         [Install]
@@ -280,12 +281,12 @@ systemd:
     # The name of the unit must match the path of where it is mounting
     # And it needs to be escaped
     # See: https://unix.stackexchange.com/questions/283442/systemd-mount-fails-where-setting-doesnt-match-unit-name#345518
-    - name: media-ssb.mount
+    - name: media-persisted.mount
       enable: true
       contents: |
         [Mount]
-        What=/dev/disk/by-partlabel/ssb
-        Where=/media/ssb
+        What=/dev/disk/by-partlabel/persisted
+        Where=/media/persisted
         Type=ext4
 
         [Install]
@@ -296,7 +297,7 @@ systemd:
       contents: |
         [Unit]
         Description=ssb-pub
-        RequiresMountsFor=/media/ssb
+        RequiresMountsFor=/media/persisted
         After=docker.service
         Requires=docker.service
 
@@ -314,7 +315,7 @@ systemd:
         ExecStartPre=-/usr/bin/docker kill ssb-pub
         ExecStartPre=-/usr/bin/docker rm ssb-pub
         ExecStartPre=/usr/bin/docker pull staltz/easy-ssb-pub
-        ExecStart=/usr/bin/docker run --name ssb-pub -e VIRTUAL_HOST -e VIRTUAL_PORT -e PUB_URL -e HOST -v /media/ssb:/root/.ssb -p 8007:8007 -p 8008:8008 -m 450M --memory-swap 1G staltz/easy-ssb-pub
+        ExecStart=/usr/bin/docker run --name ssb-pub -e VIRTUAL_HOST -e VIRTUAL_PORT -e PUB_URL -e HOST -v /media/persisted/ssb:/root/.ssb -p 8007:8007 -p 8008:8008 -m 450M --memory-swap 1G staltz/easy-ssb-pub
         ExecStop=/usr/bin/docker stop ssb-pub
 
         [Install]
