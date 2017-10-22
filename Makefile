@@ -10,7 +10,9 @@ install:
 	curl -o ct -L https://github.com/coreos/container-linux-config-transpiler/releases/download/v0.5.0/ct-v0.5.0-x86_64-$(CT_RELEASE)
 	chmod +x ct
 
-	curl -L https://releases.hashicorp.com/terraform/0.10.7/terraform_0.10.7_$(TERRAFORM_RELEASE)_amd64.zip | tar zxf -
+	curl -o terraform.zip https://releases.hashicorp.com/terraform/0.10.7/terraform_0.10.7_$(TERRAFORM_RELEASE)_amd64.zip
+	unzip -o terraform.zip
+	rm terraform.zip
 	chmod +x terraform
 
 	./terraform init
