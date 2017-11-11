@@ -28,6 +28,13 @@ resource "digitalocean_record" "giftellers-macaco-maluco" {
   value = "giftellers.firebaseapp.com."
 }
 
+resource "digitalocean_record" "sombrio-macaco-maluco" {
+  domain = "${digitalocean_domain.macaco-maluco.name}"
+  type = "CNAME"
+  name = "sombrio"
+  value = "sombrio.macacomaluco.space.herokudns.com."
+}
+
 resource "digitalocean_record" "giftellers-globalsign-macaco-maluco" {
   domain = "${digitalocean_domain.macaco-maluco.name}"
   type = "TXT"
