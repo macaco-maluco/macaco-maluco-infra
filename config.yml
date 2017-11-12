@@ -315,7 +315,7 @@ systemd:
         ExecStartPre=-/usr/bin/docker kill ssb-pub
         ExecStartPre=-/usr/bin/docker rm ssb-pub
         ExecStartPre=/usr/bin/docker pull staltz/easy-ssb-pub
-        ExecStart=/usr/bin/docker run --name ssb-pub -e VIRTUAL_HOST -e VIRTUAL_PORT -e PUB_URL -e HOST -v /media/persisted/ssb:/root/.ssb -p 8007:8007 -p 8008:8008 -m 450M --memory-swap 1G staltz/easy-ssb-pub
+        ExecStart=/usr/bin/docker run --name ssb-pub -e VIRTUAL_HOST -e VIRTUAL_PORT -e PUB_URL -e HOST -v /media/persisted/ssb:/root/.ssb -p 8007:8007 -p 8008:8008 -m 450M --memory-swap 1G pirelenito/easy-ssb-pub
         ExecStop=/usr/bin/docker stop ssb-pub
 
         [Install]
