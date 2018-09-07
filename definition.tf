@@ -66,24 +66,16 @@ data "template_file" "user-data" {
   }
 }
 
-resource "digitalocean_volume" "persisted-volume" {
-  region      = "nyc1"
-  name        = "persisted-volume"
-  size        = 4
-  description = "Persisted data"
-}
-
 resource "digitalocean_droplet" "macaco-maluco" {
   image = "coreos-stable"
   name = "macaco-maluco"
   region = "nyc1"
   size = "1gb"
-  ssh_keys = [15143, 1762125]
+  ssh_keys = [1762125, 22528967]
   ipv6 = true
   private_networking = true
 
   user_data = "${data.template_file.user-data.rendered}"
-  volume_ids = ["${digitalocean_volume.persisted-volume.id}"]
 }
 
 output "floating_ip" {

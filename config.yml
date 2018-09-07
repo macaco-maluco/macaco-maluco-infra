@@ -1,27 +1,7 @@
-# This config is meant to be consumed by the config transpiler, which will
-# generate the corresponding Ignition config. Do not pass this config directly
-# to instances of Container Linux.
-#
+locksmith:
+  reboot_strategy: "off"
+
 storage:
-  # TODO: figure out why this is failing on concecutive runs and enable it again
-  disks:
-    # the name persisted-volume is comming from the `definition.tf` file
-    - device: /dev/disk/by-id/scsi-0DO_Volume_persisted-volume
-      partitions:
-        # this is used by the `by-partlabel` bellow
-        - label: persisted
-          number: 0
-          size: '0'
-          start: '0'
-
-  # this setups the filesystem on top of the partition of the previous disk
-  filesystems:
-    - name: persisted
-      mount:
-        label: persisted
-        device: /dev/disk/by-partlabel/persisted
-        format: ext4
-
   files:
     - path: "/etc/sysctl.d/80-swappiness.conf"
       filesystem: "root"
@@ -36,13 +16,18 @@ storage:
           DNS=8.8.8.8
           FallbackDNS=8.8.4.4
 
+    - path: "/etc/resolv.conf"
+      filesystem: "root"
+      contents:
+        inline: |
+          nameserver 8.8.8.8
+
 systemd:
   units:
     - name: systemd-resolved.service
       enable: true
 
     - name: var-vm-swapfile1.swap
-      enable: true
       contents: |
         [Unit]
         Description=Turn on swap
@@ -152,7 +137,6 @@ systemd:
         [Unit]
         Description=unbubble
         After=docker.service
-        RequiresMountsFor=/media/persisted
         Requires=docker.service
 
         [Service]
@@ -167,7 +151,7 @@ systemd:
         ExecStartPre=-/usr/bin/docker kill unbubble
         ExecStartPre=-/usr/bin/docker rm unbubble
         ExecStartPre=/usr/bin/docker pull pirelenito/unbubble
-        ExecStart=/usr/bin/docker run --name unbubble -e VIRTUAL_HOST -e VIRTUAL_PORT -v /media/persisted/unbubble:/usr/src/app/server/log pirelenito/unbubble
+        ExecStart=/usr/bin/docker run --name unbubble -e VIRTUAL_HOST -e VIRTUAL_PORT pirelenito/unbubble
         ExecStop=/usr/bin/docker stop unbubble
 
         [Install]
@@ -274,49 +258,6 @@ systemd:
         ExecStartPre=/usr/bin/docker pull mongo:2.4.14
         ExecStart=/usr/bin/docker run --name mongo -p 172.17.0.1:27017:27017 mongo:2.4.14
         ExecStop=/usr/bin/docker stop mongo
-
-        [Install]
-        WantedBy=multi-user.target
-
-    # The name of the unit must match the path of where it is mounting
-    # And it needs to be escaped
-    # See: https://unix.stackexchange.com/questions/283442/systemd-mount-fails-where-setting-doesnt-match-unit-name#345518
-    - name: media-persisted.mount
-      enable: true
-      contents: |
-        [Mount]
-        What=/dev/disk/by-partlabel/persisted
-        Where=/media/persisted
-        Type=ext4
-
-        [Install]
-        WantedBy=multi-user.target
-
-    - name: ssb-pub.service
-      enable: true
-      contents: |
-        [Unit]
-        Description=ssb-pub
-        RequiresMountsFor=/media/persisted
-        After=docker.service
-        Requires=docker.service
-
-        [Service]
-        KillMode=none
-        User=core
-        Restart=always
-        RestartSec=5min
-        TimeoutSec=5min
-        Environment="VIRTUAL_HOST=ssb-pub.macacomaluco.space"
-        Environment="PUB_URL=ssb-pub.macacomaluco.space"
-        Environment="HOST=ssb-pub.macacomaluco.space"
-        Environment="VIRTUAL_PORT=80"
-
-        ExecStartPre=-/usr/bin/docker kill ssb-pub
-        ExecStartPre=-/usr/bin/docker rm ssb-pub
-        ExecStartPre=/usr/bin/docker pull pirelenito/easy-ssb-pub
-        ExecStart=/usr/bin/docker run --name ssb-pub -e VIRTUAL_HOST -e VIRTUAL_PORT -e PUB_URL -e HOST -v /media/persisted/ssb:/root/.ssb -p 8007:8007 -p 8008:8008 -m 450M --memory-swap 1G pirelenito/easy-ssb-pub
-        ExecStop=/usr/bin/docker stop ssb-pub
 
         [Install]
         WantedBy=multi-user.target
