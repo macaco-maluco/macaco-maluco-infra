@@ -70,7 +70,7 @@ resource "digitalocean_droplet" "macaco-maluco" {
   image = "coreos-stable"
   name = "macaco-maluco"
   region = "nyc1"
-  size = "1gb"
+  size = "s-1vcpu-1gb"
   ssh_keys = [1762125, 22528967]
   ipv6 = true
   private_networking = true
