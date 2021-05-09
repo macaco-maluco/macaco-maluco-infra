@@ -63,6 +63,3 @@ services:
     image: mongo:2.4.14
     expose:
       - 27017
-
-  # redis:
-  #   image: redis
