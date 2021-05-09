@@ -7,9 +7,6 @@ else
 endif
 
 install:
-	curl -o ct -L https://github.com/coreos/container-linux-config-transpiler/releases/download/v0.5.0/ct-v0.5.0-x86_64-$(CT_RELEASE)
-	chmod +x ct
-
 	curl -o terraform.zip https://releases.hashicorp.com/terraform/0.10.7/terraform_0.10.7_$(TERRAFORM_RELEASE)_amd64.zip
 	unzip -o terraform.zip
 	rm terraform.zip
@@ -17,14 +14,11 @@ install:
 
 	./terraform init
 
-compile:
-	./ct --platform=digitalocean -in-file=config.yml -out-file=config.ign
-
-plan: compile
+plan:
 	./terraform get
 	./terraform plan
 
-apply: compile
+apply:
 	./terraform get
 	./terraform apply
 

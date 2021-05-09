@@ -74,18 +74,18 @@ resource "digitalocean_floating_ip" "macaco-maluco" {
 }
 
 data "template_file" "user-data" {
-  template = "${file("./config.ign")}"
+  template = "${file("./cloud-init.yml")}"
   vars {
     tmdb_api_key = "${var.tmdb_api_key}"
   }
 }
 
 resource "digitalocean_droplet" "macaco-maluco" {
-  image = "coreos-stable"
+  image = "docker-20-04"
   name = "macaco-maluco"
   region = "nyc1"
   size = "s-1vcpu-1gb"
-  ssh_keys = [1762125, 22528967]
+  ssh_keys = [30275495]
   ipv6 = true
   private_networking = true
 

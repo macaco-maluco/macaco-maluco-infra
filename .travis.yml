@@ -1,3 +1,0 @@
-script:
-  - make install
-  - make compile

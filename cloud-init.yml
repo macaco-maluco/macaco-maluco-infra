@@ -1,0 +1,8 @@
+#cloud-config
+write_files:
+  - path: /start-services.sh
+    content: |
+      #!/usr/bin/env bash
+      wget https://raw.githubusercontent.com/macaco-maluco/macaco-maluco-infra/master/docker-compose.yml
+      export TMDB_API_KEY=${tmdb_api_key}
+      docker-compose up
