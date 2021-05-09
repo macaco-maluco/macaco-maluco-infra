@@ -3,12 +3,29 @@ services:
     image: nginxproxy/nginx-proxy
     ports:
       - "80:80"
+      - "443:443"
+    environment:
+      - DHPARAM_GENERATION=false
     volumes:
+      - /services/certs:/etc/nginx/certs
+      - /services/vhost:/etc/nginx/vhost.d
+      - /services/html:/usr/share/nginx/html
       - /var/run/docker.sock:/tmp/docker.sock:ro
+
+  nginx-proxy-acme:
+    image: nginxproxy/acme-companion
+    environment:
+      - DEFAULT_EMAIL=paulo@ragonha.me
+    volumes_from:
+      - nginx-proxy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /services/acme:/etc/acme.sh
 
   macaco-maluco:
     image: macacomaluco/macaco-maluco
     environment:
+      - LETSENCRYPT_HOST=macacomaluco.space
       - VIRTUAL_HOST=macacomaluco.space
       - VIRTUAL_PORT=80
     expose:
@@ -17,6 +34,7 @@ services:
   pressora:
     image: macacomaluco/pressora
     environment:
+      - LETSENCRYPT_HOST=pressora.macacomaluco.space
       - VIRTUAL_HOST=pressora.macacomaluco.space
       - VIRTUAL_PORT=80
     expose:
@@ -25,6 +43,7 @@ services:
   unbubble:
     image: pirelenito/unbubble
     environment:
+      - LETSENCRYPT_HOST=unbubble.space
       - VIRTUAL_HOST=unbubble.space
       - VIRTUAL_PORT=80
     expose:
@@ -33,6 +52,7 @@ services:
   birinto:
     image: macacomaluco/birinto
     environment:
+      - LETSENCRYPT_HOST=birinto.macacomaluco.space
       - VIRTUAL_HOST=birinto.macacomaluco.space
       - VIRTUAL_PORT=80
     expose:
@@ -41,6 +61,7 @@ services:
   go-horse-go:
     image: macacomaluco/go-horse-go
     environment:
+      - LETSENCRYPT_HOST=go-horse-go.macacomaluco.space
       - VIRTUAL_HOST=go-horse-go.macacomaluco.space
       - VIRTUAL_PORT=80
     expose:
@@ -52,6 +73,7 @@ services:
       - TMDB_API_KEY
       - MONGO_PORT=tcp://mongo:27017
       - MONGO_DATABASE=cinema-fu
+      - LETSENCRYPT_HOST=cinema-fu.macacomaluco.space
       - VIRTUAL_HOST=cinema-fu.macacomaluco.space
       - VIRTUAL_PORT=80
     expose:
