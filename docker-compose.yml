@@ -22,15 +22,6 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /services/acme:/etc/acme.sh
 
-  macaco-maluco:
-    image: macacomaluco/macaco-maluco
-    environment:
-      - LETSENCRYPT_HOST=macacomaluco.space
-      - VIRTUAL_HOST=macacomaluco.space
-      - VIRTUAL_PORT=80
-    expose:
-      - 80
-
   pressora:
     image: macacomaluco/pressora
     environment:
